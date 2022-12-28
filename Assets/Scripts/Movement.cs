@@ -1,0 +1,50 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Movement : MonoBehaviour
+{
+    Rigidbody rocket_rigid_body;//rigid body for rocket
+    [SerializeField] float mainThrust=1000f; // spacebar thrust
+    [SerializeField] float rotationThrust = 100f;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rocket_rigid_body=GetComponent<Rigidbody>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        ProcessThrust();
+        ProcessRotation();
+    }
+
+    void ProcessThrust()
+    {
+        if(Input.GetKey(KeyCode.Space))
+        {
+            // Debug.Log("Pressed Space - Thrusting");
+            rocket_rigid_body.AddRelativeForce(Vector3.up * mainThrust*Time.deltaTime);
+        }
+        
+    }
+    void ProcessRotation()
+    {
+        if(Input.GetKey(KeyCode.A))
+        {
+            // Debug.Log("Rotating left");
+            ApplyRotation(rotationThrust);
+        }
+        else if(Input.GetKey(KeyCode.D))
+        {
+            ApplyRotation(-rotationThrust);
+        }
+    }
+    void ApplyRotation(float rotationThisFrame)
+    {
+        rocket_rigid_body.freezeRotation = true; // freezing rotation to be able to manually rotate
+        transform.Rotate(Vector3.forward* rotationThisFrame *Time.deltaTime);
+        rocket_rigid_body.freezeRotation = false; // unfreezing so the phsyics system cannot take over
+    }
+}
