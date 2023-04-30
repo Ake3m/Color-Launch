@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    Rigidbody rocket_rigid_body;//rigid body for rocket
+    [SerializeField] AudioClip ThrustSound;
+    Rigidbody rocket_rigid_body;//rigid body for rocket'
+    AudioSource thruster;
     [SerializeField] float mainThrust=1000f; // spacebar thrust
     [SerializeField] float rotationThrust = 100f;
+
+    [SerializeField] ParticleSystem mainThrusterParticle;
     // Start is called before the first frame update
     void Start()
     {
         rocket_rigid_body=GetComponent<Rigidbody>();
+        thruster=GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -20,13 +25,30 @@ public class Movement : MonoBehaviour
         ProcessRotation();
     }
 
+
     void ProcessThrust()
     {
         if(Input.GetKey(KeyCode.Space))
         {
             // Debug.Log("Pressed Space - Thrusting");
+            if(!thruster.isPlaying)
+            {
+                thruster.PlayOneShot(ThrustSound);
+            }
             rocket_rigid_body.AddRelativeForce(Vector3.up * mainThrust*Time.deltaTime);
+
+            if(!mainThrusterParticle.isPlaying)
+            {
+                mainThrusterParticle.Play();
+            }
+            
         }
+        else{
+            mainThrusterParticle.Stop();
+            thruster.Stop();
+        }
+
+        
         
     }
     void ProcessRotation()
@@ -34,11 +56,11 @@ public class Movement : MonoBehaviour
         if(Input.GetKey(KeyCode.A))
         {
             // Debug.Log("Rotating left");
-            ApplyRotation(rotationThrust);
+            ApplyRotation(-rotationThrust);
         }
         else if(Input.GetKey(KeyCode.D))
         {
-            ApplyRotation(-rotationThrust);
+            ApplyRotation(rotationThrust);
         }
     }
     void ApplyRotation(float rotationThisFrame)

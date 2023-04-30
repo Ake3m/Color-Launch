@@ -3,7 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Fuel
+  - Friendly
+  - Red
+  - RedObstacle
+  - GreenObstacle
+  - BlueObstacle
+  - Door1
+  - YellowObstacle
+  - yellowPill
   layers:
   - Default
   - TransparentFX
